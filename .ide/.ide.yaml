@@ -1,0 +1,31 @@
+ersion: smartide/v0.2
+orchestrator:
+  type: docker-compose
+  version: 3
+workspace:
+  dev-container:
+    service-name: mall4j
+    webide-port: 6800
+    ide-type: vscode
+  services:
+    mall4j:
+      image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-opvscode:latest
+      restart: always
+      environment:
+        POSTGRES_HOST_AUTH_METHOD: trust
+        ROOT_PASSWORD: root123
+      volumes:
+        - .:/home/project
+      expose:
+        - 8001
+      ports:
+        - 8081:8081
+      networks:
+        - smartide-network
+  networks:
+    smartide-network:
+      driver: bridge
+      ipam:
+        driver: default
+        config:
+          - subnet: 172.30.10.0/24
